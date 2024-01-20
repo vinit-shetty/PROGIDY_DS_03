@@ -1,0 +1,4 @@
+**Bank Marketing Decision Tree Classifier**
+
+This R script is designed to analyze the Bank Marketing dataset using a decision tree classifier. To begin, install and load the necessary libraries, including `rpart` and `rpart.plot`. The dataset is loaded and explored, ensuring a clear understanding of its structure. Following this, preprocessing steps are performed, such as converting categorical variables to factors and selecting relevant features. The data is then split into training and testing sets. A decision tree model is built using the `rpart` package, and the resulting tree is visualized using `rpart.plot`. Finally, predictions are made on the test set, and model performance is evaluated with a confusion matrix, shedding light on the accuracy of predicting the target variable 'y'. Customize the script as needed for specific analytical requirements.
+
