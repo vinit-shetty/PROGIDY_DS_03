@@ -1,0 +1,54 @@
+# Install and load necessary libraries
+install.packages("rpart")
+install.packages("rpart.plot")
+
+library(rpart)
+library(rpart.plot)
+
+# Load the Bank Marketing dataset
+bank_data <- read.csv("bank-full.csv", sep = ";", header = TRUE)
+
+# Explore the structure of the dataset
+str(bank_data)
+
+# Preprocess the data
+# Convert 'y' to a binary variable (0 or 1)
+bank_data$y <- ifelse(bank_data$y == "no", 0, 1)
+
+# Convert categorical variables to factors
+bank_data$job <- as.factor(bank_data$job)
+bank_data$marital <- as.factor(bank_data$marital)
+bank_data$education <- as.factor(bank_data$education)
+bank_data$default <- as.factor(bank_data$default)
+bank_data$housing <- as.factor(bank_data$housing)
+bank_data$loan <- as.factor(bank_data$loan)
+bank_data$contact <- as.factor(bank_data$contact)
+bank_data$month <- as.factor(bank_data$month)
+bank_data$poutcome <- as.factor(bank_data$poutcome)
+
+# Handle missing values if necessary (e.g., imputation)
+# Example: Impute missing values in 'age' with the mean
+bank_data$age[is.na(bank_data$age)] <- mean(bank_data$age, na.rm = TRUE)
+
+# Select relevant features for the model
+selected_features <- c("age", "job", "marital", "education", "default", "balance", "housing", "loan", "contact", "day", "month", "duration", "campaign", "pdays", "previous", "poutcome", "y")
+bank_data <- bank_data[, selected_features]
+
+# Split the data into training and testing sets
+set.seed(123)
+train_indices <- sample(1:nrow(bank_data), 0.7 * nrow(bank_data))
+train_data <- bank_data[train_indices, ]
+test_data <- bank_data[-train_indices, ]
+
+# Build the decision tree model
+model <- rpart(y ~ ., data = train_data, method = "class")
+
+# Visualize the decision tree
+rpart.plot(model, main = "Decision Tree for Bank Marketing")
+
+# Make predictions on the test set
+predictions <- predict(model, test_data, type = "class")
+
+# Evaluate the model (you can use different metrics based on your problem)
+conf_matrix <- table(predictions, test_data$y)
+print(conf_matrix)
